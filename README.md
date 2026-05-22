@@ -1,4 +1,4 @@
-# 실습 4 - FastAPI 과제
+# 실습 5 - Docker 과제
 
 ## 제출자 정보
 
@@ -10,31 +10,36 @@
 
 ## 과제 소개
 
-JSON 파일 기반 수강기록 관리 REST API 서버입니다.
-FastAPI를 사용해 GET / POST 엔드포인트를 구현하고, Postman으로 동작을 검증합니다.
+FastAPI 수강기록 관리 API를 Docker 컨테이너로 빌드하여 AWS EC2 환경에 배포합니다.  
+외부 80번 포트와 컨테이너 내부 8000번 포트를 매핑하여 브라우저에서 접속 가능하도록 구성합니다.
 
 ## 실행 방법
 
 ### 요구 사항
 
-- Python 3.9+
-- FastAPI
-- Uvicorn
+- Docker
 
 ### 설치 및 실행
 
 ```bash
 # 저장소 클론
-git clone https://github.com/Hoseong21/oss-fastapi-project.git
-cd oss-fastapi-project
+git clone https://github.com/Hoseong21/oss-docker-project.git
+cd oss-docker-project
 
-# 가상환경 생성 및 활성화 (권장)
-python -m venv venv
-source venv/bin/activate  # macOS/Linux
+# Docker 이미지 빌드
+sudo docker build -t fastapi-courses .
 
-# 의존성 설치
-pip install -r requirements.txt
+# 컨테이너 실행 (외부 80 → 내부 8000 매핑, 자동 재시작 설정)
+sudo docker run -d \
+  --name fastapi-app \
+  -p 80:8000 \
+  --restart=always \
+  fastapi-courses
 
-# FastAPI 서버 실행
-python main.py
+# 컨테이너 실행 확인
+sudo docker ps
 ```
+
+### 접속
+
+브라우저에서 `http://[EC2 퍼블릭 IP]/courses` 로 접속
